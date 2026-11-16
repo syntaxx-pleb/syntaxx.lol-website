@@ -6,6 +6,7 @@ import {
 import logoUrl from "/syntaxx-logo.png";
 import { Link } from "wouter";
 import { INVITE_URL } from "@/config";
+import { stats } from "@/data/stats";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import { useIsMobile } from "@/hooks/use-media-query";
@@ -22,24 +23,6 @@ const features = [
   { icon: Zap,        title: "Auto-Mod",    color: HUE.casino,     desc: "Anti-spam, attachment filter, raid protection and configurable automod rules." },
   { icon: ScanSearch, title: "Alt Scanner", color: HUE.toggles,    desc: "Detect alt accounts based on account age and behaviour patterns." },
   { icon: Sparkles,   title: "Fun & Tools", color: PLATINUM,       desc: "Color roles, AFK system, GIF editor, QR codes, sticker stealing and more." },
-];
-
-/**
- * Claims the hero makes concrete.
- *
- * These numbers describe the catalogue in Commands.tsx, but are written out
- * rather than derived from it: importing that array here would pull the whole
- * 27 kB command list into the landing page's bundle and undo the code-split
- * App.tsx sets up deliberately.
- *
- * That makes them capable of going stale, so `scripts/verify.js` counts the
- * real catalogue and fails if either figure stops being true. Change a command
- * or a category and the check will tell you to change these too.
- */
-const stats = [
-  { value: "100+", label: "Commands" },
-  { value: "14",   label: "Categories" },
-  { value: "Free", label: "Every feature" },
 ];
 
 export default function Home() {

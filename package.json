@@ -10,7 +10,8 @@
     "build": "vite build",
     "typecheck": "tsc --build --force",
     "verify": "node scripts/verify.js",
-    "browser-check": "node scripts/browser-check.js"
+    "browser-check": "node scripts/browser-check.js",
+    "check-previews": "node scripts/check-previews.js"
   },
   "dependencies": {
     "hono": "^4.13.1",

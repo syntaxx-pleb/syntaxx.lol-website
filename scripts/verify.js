@@ -86,14 +86,15 @@ function walk(dir, out = []) {
 
 // ── 4. Home's headline figures must match the real command catalogue ────────
 //
-// Home advertises a command count and a category count. The catalogue itself
+// Home (and the Discord link previews, via web/src/data/stats.ts) advertises a
+// command count and a category count. The catalogue itself
 // lives in Commands.tsx and cannot be imported into Home without pulling a
 // 27 kB list into the landing page's bundle, so the figures are written out by
 // hand — which means they can quietly stop being true the moment a command is
 // added. A visitor cannot tell; the numbers just become a small lie.
 {
   const commands = readFileSync(join(root, "web", "src", "pages", "Commands.tsx"), "utf8");
-  const home = readFileSync(join(root, "web", "src", "pages", "Home.tsx"), "utf8");
+  const home = readFileSync(join(root, "web", "src", "data", "stats.ts"), "utf8");
 
   // Category objects in the array are the ones declaring an `id:` and a
   // `label:` on the same line; command entries declare `name:` and `desc:`.
@@ -108,7 +109,7 @@ function walk(dir, out = []) {
   const statedCategories = stated("Categories");
   if (statedCategories !== null && Number(statedCategories) !== categories) {
     fail(
-      `Home.tsx advertises ${statedCategories} categories, but Commands.tsx defines ${categories}`,
+      `data/stats.ts advertises ${statedCategories} categories, but Commands.tsx defines ${categories}`,
     );
   }
 
@@ -118,7 +119,7 @@ function walk(dir, out = []) {
     const floor = Number(statedCommands.replace("+", ""));
     if (Number.isFinite(floor) && commandCount < floor) {
       fail(
-        `Home.tsx advertises "${statedCommands}" commands, but Commands.tsx defines only ${commandCount}`,
+        `data/stats.ts advertises "${statedCommands}" commands, but Commands.tsx defines only ${commandCount}`,
       );
     }
   }
