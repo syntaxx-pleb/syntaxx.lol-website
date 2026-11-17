@@ -1,5 +1,5 @@
 {
-  "updated": "29 Oct 2026",
+  "updated": "17 Nov 2026",
   "statuses": {
     "stable": "Live and settled",
     "beta": "Live, still being tried",
@@ -11,7 +11,7 @@
       "name": "Moderation & cases",
       "audience": "public",
       "status": "stable",
-      "building": false,
+      "building": true,
       "since": "",
       "sinceLabel": "",
       "summary": "Warn, mute, timeout, kick and ban, each kept as a case with the member's history.",
@@ -20,6 +20,7 @@
         "Warn, mute, timeout, kick and ban, from slash commands or right-click.",
         "Every action is a case with the moderator and reason.",
         "/infractions shows one member's whole history.",
+        "/infractions has a Purges tab: each purge and what started it, a mod, the auto-kick trap or /clear.",
         "After a set number of warnings, a timeout is offered."
       ],
       "use": [
@@ -35,6 +36,7 @@
         }
       ],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "softban",
@@ -333,7 +335,9 @@
           "name": "/view-all-cases",
           "kind": "slash",
           "description": "View all cases in this server",
-          "permissions": [],
+          "permissions": [
+            "Manage Messages"
+          ],
           "developer": false,
           "tester": false,
           "aliases": [],
@@ -443,7 +447,7 @@
             {
               "name": "user",
               "type": "user",
-              "description": "The user you want to DM.",
+              "description": "The member you want to DM (must be in this server).",
               "required": true,
               "choices": []
             },
@@ -464,7 +468,7 @@
             {
               "name": "link",
               "type": "string",
-              "description": "Optional link to include.",
+              "description": "Optional link to include (https:// only).",
               "required": false,
               "choices": []
             },
@@ -661,7 +665,117 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>mod-log<span class=\"topic\">every action is a case</span></div><div class=\"body\">\n<div class=\"sys\"><span class=\"mention\">@nova</span> used <code>/warn</code></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#f0b232\"><b>⚠️ Member warned · case #128</b><div><b>Member:</b> <span class=\"mention\">@k1ra_x</span></div><div><b>Reason:</b> Posting invite links</div><div><b>Moderator:</b> <span class=\"mention\">@nova</span></div><div class=\"sub\">Warning 3 of 3 · a 1 h timeout is offered</div></div>\n<div class=\"btns\"><span class=\"btn primary\">Timeout 1 h</span><span class=\"btn\">Not now</span></div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"card\" style=\"border-left-color:#5865f2\"><div class=\"h3\">Infractions · k1ra_x</div><div>Warns <b>3</b> · Timeouts <b>1</b> · Mutes <b>0</b> · Kicks <b>0</b> · Bans <b>0</b></div><div class=\"btns\"><span class=\"btn primary\">Warns</span><span class=\"btn\">Timeouts</span><span class=\"btn\">Mutes</span></div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>mod-log<span class=\"topic\">every action is a case</span></div><div class=\"body\">\r\n<div class=\"sys\"><span class=\"mention\">@nova</span> used <code>/warn</code></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#f0b232\"><b>⚠️ Member warned · case #128</b><div><b>Member:</b> <span class=\"mention\">@k1ra_x</span></div><div><b>Reason:</b> Posting invite links</div><div><b>Moderator:</b> <span class=\"mention\">@nova</span></div><div class=\"sub\">Warning 3 of 3 · a 1 h timeout is offered</div></div>\r\n<div class=\"btns\"><span class=\"btn primary\">Timeout 1 h</span><span class=\"btn\">Not now</span></div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"card\" style=\"border-left-color:#5865f2\"><div class=\"h3\">Infractions · k1ra_x</div><div>Warns <b>3</b> · Timeouts <b>1</b> · Mutes <b>0</b> · Kicks <b>0</b> · Bans <b>0</b></div><div class=\"btns\"><span class=\"btn primary\">Warns</span><span class=\"btn\">Timeouts</span><span class=\"btn\">Mutes</span></div></div></div></div>\r\n</div></div>"
+    },
+    {
+      "id": "automod",
+      "name": "Automod",
+      "audience": "public",
+      "status": "stable",
+      "building": false,
+      "since": "",
+      "sinceLabel": "",
+      "summary": "Removes slurs and your own banned words, with a DM to the sender. Can be switched off per channel or forum.",
+      "lead": "Automod deletes messages with slurs or the server's own banned words, times the sender out for a minute and DMs them why. It can be switched off for one channel, forum or thread, and a forum that's off covers all its posts.",
+      "points": [
+        "Deletes messages with slurs or the server's custom words and DMs the sender.",
+        "/automod channel turns it off or on for one channel, forum or thread.",
+        "/automod list shows where it's off."
+      ],
+      "use": [
+        "Switch it off for a channel or forum: `/automod channel` with filter Off. Posts and threads inside follow it.",
+        "See where it's off: `/automod list`.",
+        "Turn automod on or off for the whole server, and its DM notices: the dashboard's Settings › Automod."
+      ],
+      "why": [
+        {
+          "title": "Forums follow their parent",
+          "text": "Every forum post is its own thread with its own ID, so exempting the forum alone did nothing for its posts. The filter now checks the post's forum too."
+        }
+      ],
+      "rules": [],
+      "earns": [],
+      "arrived": [],
+      "related": [
+        "moderation",
+        "command-perms"
+      ],
+      "commands": [
+        {
+          "name": "/automod channel",
+          "kind": "slash",
+          "description": "Turn automod off or on for one channel, forum or thread",
+          "permissions": [
+            "Manage Guild"
+          ],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [
+            {
+              "name": "channel",
+              "type": "channel",
+              "description": "A channel, forum or thread. Off also covers its threads and posts.",
+              "required": true,
+              "choices": []
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "description": "Off: messages there aren't filtered. On: filtered again.",
+              "required": true,
+              "choices": [
+                "Off",
+                "On"
+              ]
+            }
+          ],
+          "copy": "/automod channel channel: filter:"
+        },
+        {
+          "name": "/automod list",
+          "kind": "slash",
+          "description": "Show where automod is off",
+          "permissions": [
+            "Manage Guild"
+          ],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [],
+          "copy": "/automod list"
+        }
+      ],
+      "settings": null,
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>staff-commands</div><div class=\"body\">\n<div class=\"sys\"><span class=\"mention\">@Han</span> used <code>/automod channel</code></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 09:12</span></div>\n<div class=\"embed\" style=\"border-left-color:#3ba55c;max-width:560px\"><b>Automod is now off in 💬 build-threads</b><div>That includes every post and reply in it. Automod still runs in the rest of the server.</div><div class=\"sub\">Turn it back on with /automod channel filter: On</div></div>\n<div class=\"sys\" style=\"font-size:12px\">Only you can see this · Dismiss message</div></div></div>\n<div class=\"input\"><span>/automod channel</span><span class=\"opt\">channel: 💬 build-threads</span><span class=\"opt\">filter: Off</span></div>\n</div></div>"
+    },
+    {
+      "id": "automod-media-flags",
+      "name": "Automod media flags",
+      "audience": "public",
+      "status": "planned",
+      "building": true,
+      "since": "",
+      "sinceLabel": "",
+      "summary": "Would act on images Discord marks as explicit, gore or self-harm. Being tested in BMW Lovers.",
+      "lead": "Discord now scans attachments and marks explicit, gore and self-harm content. Automod would use those marks. For now it only reports them in BMW Lovers' mod log while the owner watches real alerts.",
+      "points": [
+        "Test: a report in the mod log, nothing removed and nobody punished.",
+        "Marks that arrive after posting are caught too.",
+        "Explicit is left alone in age-restricted channels.",
+        "Self-harm is worded for checking in, never as a rule break."
+      ],
+      "use": [],
+      "why": [],
+      "rules": [],
+      "earns": [],
+      "arrived": [],
+      "related": [
+        "automod"
+      ],
+      "commands": [],
+      "settings": null,
+      "scene": ""
     },
     {
       "id": "softban",
@@ -677,11 +791,14 @@
         "The member keeps their place but sees only the softban lobby.",
         "After a wait, an Appeal button opens a private ticket.",
         "Staff approve or deny from the ticket; approving gives their roles back.",
-        "Softbans survive leaving and rejoining."
+        "Softbans survive leaving and rejoining.",
+        "Evidence from an approved /request-softban is copied to a locked #evidence channel in the staff server, and the softban links to it."
       ],
       "use": [
         "Softban: `/softban`. Members without the permission can `/request-softban`.",
         "Set the softban role and lobby channel: `/setup softban`.",
+        "Store softban evidence: `/setup evidence` in the staff server makes the locked channel (optional view-role reads it).",
+        "Remove a stored post: `/evidence remove` with its EV ID (deleting the post by hand works too).",
         "Decide an appeal: the buttons in the ticket, or `/appeal approve` and `/appeal deny`.",
         "Lift it early: `/unsoftban`."
       ],
@@ -692,6 +809,7 @@
         }
       ],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "moderation"
@@ -800,70 +918,70 @@
             {
               "name": "file1",
               "type": "attachment",
-              "description": "Evidence file 1 (required)",
+              "description": "Evidence file 1, image or video (required)",
               "required": true,
               "choices": []
             },
             {
               "name": "file2",
               "type": "attachment",
-              "description": "Evidence file 2 (optional)",
+              "description": "Evidence file 2, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file3",
               "type": "attachment",
-              "description": "Evidence file 3 (optional)",
+              "description": "Evidence file 3, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file4",
               "type": "attachment",
-              "description": "Evidence file 4 (optional)",
+              "description": "Evidence file 4, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file5",
               "type": "attachment",
-              "description": "Evidence file 5 (optional)",
+              "description": "Evidence file 5, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file6",
               "type": "attachment",
-              "description": "Evidence file 6 (optional)",
+              "description": "Evidence file 6, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file7",
               "type": "attachment",
-              "description": "Evidence file 7 (optional)",
+              "description": "Evidence file 7, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file8",
               "type": "attachment",
-              "description": "Evidence file 8 (optional)",
+              "description": "Evidence file 8, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file9",
               "type": "attachment",
-              "description": "Evidence file 9 (optional)",
+              "description": "Evidence file 9, image or video (optional)",
               "required": false,
               "choices": []
             },
             {
               "name": "file10",
               "type": "attachment",
-              "description": "Evidence file 10 (optional)",
+              "description": "Evidence file 10, image or video (optional)",
               "required": false,
               "choices": []
             }
@@ -934,10 +1052,66 @@
             }
           ],
           "copy": "/setup softban action:"
+        },
+        {
+          "name": "/setup evidence",
+          "kind": "slash",
+          "description": "Create or lock the channel softban evidence is stored in",
+          "permissions": [
+            "Administrator"
+          ],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [
+            {
+              "name": "channel",
+              "type": "channel",
+              "description": "Use and lock this channel, or omit to create #evidence",
+              "required": false,
+              "choices": []
+            },
+            {
+              "name": "view-role",
+              "type": "role",
+              "description": "A role that may read it (never post); admins always can",
+              "required": false,
+              "choices": []
+            }
+          ],
+          "copy": "/setup evidence"
+        },
+        {
+          "name": "/evidence remove",
+          "kind": "slash",
+          "description": "Delete one evidence post and take its link off the softban",
+          "permissions": [
+            "Manage Messages"
+          ],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [
+            {
+              "name": "id",
+              "type": "string",
+              "description": "The evidence ID, e.g. EV-0002 (or just 2)",
+              "required": true,
+              "choices": []
+            },
+            {
+              "name": "reason",
+              "type": "string",
+              "description": "Why it's removed (kept on the request card)",
+              "required": false,
+              "choices": []
+            }
+          ],
+          "copy": "/evidence remove id:"
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>softban-lobby<span class=\"topic\">the only channel a softbanned member sees</span></div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"card\" style=\"border-left-color:#f0b232\"><div class=\"h3\">You have been softbanned in Gaming Hub</div><div><b>Reason:</b> Repeated spam after warnings</div><div>You can open an appeal <span class=\"ts\">in 2 days</span>.</div><div class=\"btns\"><span class=\"btn success off\">Appeal</span></div></div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"card\" style=\"border-left-color:#5865f2\"><div class=\"h3\">Appeal #4 · k1ra_x</div><div><span class=\"mention\">@k1ra_x</span>: “I was sharing my own server, I didn't know that counted. It won't happen again.”</div><div class=\"btns\"><span class=\"btn success\">Approve</span><span class=\"btn danger\">Deny</span></div><div class=\"sub\">Approving gives their roles back</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>softban-lobby<span class=\"topic\">the only channel a softbanned member sees</span></div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"card\" style=\"border-left-color:#f0b232\"><div class=\"h3\">You have been softbanned in Gaming Hub</div><div><b>Reason:</b> Repeated spam after warnings</div><div>You can open an appeal <span class=\"ts\">in 2 days</span>.</div><div class=\"btns\"><span class=\"btn success off\">Appeal</span></div></div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"card\" style=\"border-left-color:#5865f2\"><div class=\"h3\">Appeal #4 · k1ra_x</div><div><span class=\"mention\">@k1ra_x</span>: “I was sharing my own server, I didn't know that counted. It won't happen again.”</div><div class=\"btns\"><span class=\"btn success\">Approve</span><span class=\"btn danger\">Deny</span></div><div class=\"sub\">Approving gives their roles back</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "trust-card",
@@ -953,11 +1127,13 @@
         "Scores every join in points, with each reason shown.",
         "Five levels, from Trusted to Extreme, in the card's colour.",
         "Safe joins take one short card; risky ones get the full card.",
-        "Buttons to see infractions, time out, kick or mark safe."
+        "Buttons to see infractions, time out, kick or mark safe.",
+        "Gives the member role on join; held new accounts get it when their wait ends.",
+        "Catches up joins missed while the bot was offline, marked on the card."
       ],
       "use": [
         "Turn it on: `/setup member-log log-channel:#logs`. Every join then posts a card there.",
-        "Give new members a role at the same time with `member-role`, and bots with `bot-role`.",
+        "Give new members a role at the same time with `member-role` (and bots with `bot-role`). Syntaxx checks it can give it; members who must accept the rules get it once they do.",
         "Act from the card: the buttons need Moderate Members, Kick needs Kick Members."
       ],
       "why": [
@@ -971,6 +1147,7 @@
         }
       ],
       "rules": [],
+      "earns": [],
       "arrived": [
         {
           "date": "2026-10-29",
@@ -981,11 +1158,17 @@
           "date": "2026-10-29",
           "what": "Short cards put the details on a second line, and leave the role out when the server gives none.",
           "label": "29 Oct 2026"
+        },
+        {
+          "date": "2026-11-08",
+          "what": "Syntaxx gives the join role itself, waits for rules acceptance, and catches up joins after a restart.",
+          "label": "8 Nov 2026"
         }
       ],
       "related": [
         "anti-raid",
-        "threat-network"
+        "threat-network",
+        "account-age-gate"
       ],
       "commands": [
         {
@@ -1025,7 +1208,93 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>member-log</div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"card\" style=\"border-left-color:#e21e1e\"><div class=\"row\"><div class=\"grow\"><div class=\"h3\">k1ra_x joined</div><div><span class=\"mention\">@k1ra_x</span> · got the Member role</div><div>🔴 <b>Extreme risk</b> · 95 points · 4 reasons</div></div><div class=\"thumb\"></div></div>\n<div class=\"sep\"></div><div><code>+40</code> <b>Account is 10 days old</b></div><div><code>+15</code> <b>Empty profile:</b> default avatar, no banner, no badges</div><div><code>+20</code> <b>Part of a join wave:</b> 12 new accounts in 60 s</div><div><code>+20</code> <b>Been here before:</b> 1 timeout, 2 warns</div>\n<div class=\"sep\"></div><div class=\"btns\"><span class=\"btn\">Infractions</span><span class=\"btn primary\">Timeout 1 h</span><span class=\"btn danger\">Kick</span><span class=\"btn success\">Mark safe</span></div></div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"card\" style=\"border-left-color:#3b82f6\"><div><span class=\"mention\">@mira</span> joined · 🔵 <b>Trusted</b><div class=\"sub\">3-year-old account, no flags · got the Member role · just now</div></div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>member-log</div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"card\" style=\"border-left-color:#e21e1e\"><div class=\"row\"><div class=\"grow\"><div class=\"h3\">k1ra_x joined</div><div><span class=\"mention\">@k1ra_x</span> · got the Member role</div><div>🔴 <b>Extreme risk</b> · 95 points · 4 reasons</div></div><div class=\"thumb\"></div></div>\r\n<div class=\"sep\"></div><div><code>+40</code> <b>Account is 10 days old</b></div><div><code>+15</code> <b>Empty profile:</b> default avatar, no banner, no badges</div><div><code>+20</code> <b>Part of a join wave:</b> 12 new accounts in 60 s</div><div><code>+20</code> <b>Been here before:</b> 1 timeout, 2 warns</div>\r\n<div class=\"sep\"></div><div class=\"btns\"><span class=\"btn\">Infractions</span><span class=\"btn primary\">Timeout 1 h</span><span class=\"btn danger\">Kick</span><span class=\"btn success\">Mark safe</span></div></div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"card\" style=\"border-left-color:#3b82f6\"><div><span class=\"mention\">@mira</span> joined · 🔵 <b>Trusted</b><div class=\"sub\">3-year-old account, no flags · got the Member role · just now</div></div></div></div></div>\r\n</div></div>"
+    },
+    {
+      "id": "account-age-gate",
+      "name": "Account age gate",
+      "audience": "public",
+      "status": "beta",
+      "building": false,
+      "since": "2026-11-07",
+      "sinceLabel": "7 Nov 2026",
+      "summary": "Accounts younger than 30 days are timed out on join and see only one channel until they're 30 days old.",
+      "lead": "In servers that turn it on, a new account sees only one channel and can't chat until it's 30 days old. A 5-day-old account waits 25 days. The join card shows until when, and Mark safe lets someone in early.",
+      "points": [
+        "Off until a server turns it on. The 30 days are fixed.",
+        "Timed out, and only the info channel is visible until day 30.",
+        "The join card shows until when, and Mark safe lets them in early.",
+        "One info card in the channel you pick explains the rule."
+      ],
+      "use": [
+        "Turn it on: `/setup account-age enabled:True info-channel:#new-accounts`, or the dashboard's Server › Logging. The bot needs Timeout Members, Manage Roles and Manage Channels.",
+        "Let someone in early: Mark safe on their join card. It's posted to the mod log.",
+        "Turn it off: `/setup account-age enabled:False`. The new account role is deleted; running timeouts end on their own dates."
+      ],
+      "why": [
+        {
+          "title": "Longer than Discord allows",
+          "text": "Discord stops a timeout at 28 days, so an account 0 or 1 day old gets 28 days and the bot adds the rest. It only extends a timeout that is still its own."
+        },
+        {
+          "title": "No Timeout 1 h on a held member",
+          "text": "That button would replace a timeout of weeks with one of an hour, so it's left off the card while someone waits."
+        },
+        {
+          "title": "Join role waits",
+          "text": "A role allowed into a channel would beat the hide, so the server's join role is given when the wait ends."
+        }
+      ],
+      "rules": [],
+      "earns": [],
+      "arrived": [
+        {
+          "date": "2026-11-07",
+          "what": "Account age gate: new accounts wait until they are 30 days old.",
+          "label": "7 Nov 2026"
+        },
+        {
+          "date": "2026-11-08",
+          "what": "Held accounts see only the info channel; the join role waits until the hold ends.",
+          "label": "8 Nov 2026"
+        }
+      ],
+      "related": [
+        "trust-card",
+        "anti-raid"
+      ],
+      "commands": [
+        {
+          "name": "/setup account-age",
+          "kind": "slash",
+          "description": "Time out accounts under 30 days old when they join",
+          "permissions": [
+            "Administrator"
+          ],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [
+            {
+              "name": "enabled",
+              "type": "boolean",
+              "description": "Turn the gate on or off",
+              "required": true,
+              "choices": []
+            },
+            {
+              "name": "info-channel",
+              "type": "channel",
+              "description": "The one channel held accounts see; the rule is posted there (needed to turn it on)",
+              "required": false,
+              "choices": []
+            }
+          ],
+          "copy": "/setup account-age enabled:"
+        }
+      ],
+      "settings": null,
+      "scene": "<div class=\"sx-scene\"><div class=\"split\">\n<div class=\"side\"><div class=\"cat\">INFO</div><div class=\"ch on\"># new-accounts</div></div>\n<div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:30</span></div>\n<div class=\"card\" style=\"border-left-color:#c9b06a\"><div class=\"h3\">New accounts wait 30 days</div>\n<div>Accounts younger than 30 days are timed out when they join, until the account is 30 days old. Until then you can only see this channel, and Discord shows when your timeout ends.</div>\n<div>New account but not new to us? Message a moderator: they can let you in early.</div>\n<div class=\"sub\">Accounts 30 days or older aren't affected.</div></div></div></div>\n<div class=\"input\" style=\"color:#949ba4\">🕒 You're timed out. You can chat again in 25 days.</div>\n</div></div></div>"
     },
     {
       "id": "anti-raid",
@@ -1054,6 +1323,7 @@
         }
       ],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "trust-card",
@@ -1075,7 +1345,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>mod-log</div><div class=\"body\">\n<div class=\"msg\" style=\"opacity:.55\"><div class=\"av\">R</div><div class=\"col\"><div class=\"who\"><span class=\"name\">raid_bot_77</span><span class=\"time\">Today at 21:13</span></div><div>JOIN NOW discord.gg/…</div><div>JOIN NOW discord.gg/…</div><div>JOIN NOW discord.gg/…</div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#ed4245\"><b>🚫 Anti-Raid Triggered</b><div><b>User:</b> <span class=\"mention\">@raid_bot_77</span></div><div><b>Sent:</b> 5 messages in 3 seconds</div><div><b>Action:</b> timed out for 1 hour</div><div class=\"sub\">They were sent a DM saying why</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>mod-log</div><div class=\"body\">\r\n<div class=\"msg\" style=\"opacity:.55\"><div class=\"av\">R</div><div class=\"col\"><div class=\"who\"><span class=\"name\">raid_bot_77</span><span class=\"time\">Today at 21:13</span></div><div>JOIN NOW discord.gg/…</div><div>JOIN NOW discord.gg/…</div><div>JOIN NOW discord.gg/…</div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#ed4245\"><b>🚫 Anti-Raid Triggered</b><div><b>User:</b> <span class=\"mention\">@raid_bot_77</span></div><div><b>Sent:</b> 5 messages in 3 seconds</div><div><b>Action:</b> timed out for 1 hour</div><div class=\"sub\">They were sent a DM saying why</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "auto-kick",
@@ -1104,6 +1374,7 @@
         }
       ],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "anti-raid",
@@ -1173,7 +1444,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>do-not-post<span class=\"topic\">Do not post here. Anything posted gets your account stopped.</span></div><div class=\"body\">\n<div class=\"msg\" style=\"opacity:.55\"><div class=\"av\">J</div><div class=\"col\"><div class=\"who\"><span class=\"name\">jake</span><span class=\"time\">Today at 21:13</span></div><div style=\"text-decoration:line-through\">free nitro for everyone 🎁 steamgift.example/claim</div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#f0b232\"><b>⚠️ Auto-trap triggered in Gaming Hub</b><div><b>Account:</b> <span class=\"mention\">@jake</span></div><div><b>Strike 1 of 3:</b> 5 hour timeout</div><div>Their recent messages were purged.</div><div class=\"sub\">Next: 5 days, then the mute role</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>do-not-post<span class=\"topic\">Do not post here. Anything posted gets your account stopped.</span></div><div class=\"body\">\r\n<div class=\"msg\" style=\"opacity:.55\"><div class=\"av\">J</div><div class=\"col\"><div class=\"who\"><span class=\"name\">jake</span><span class=\"time\">Today at 21:13</span></div><div style=\"text-decoration:line-through\">free nitro for everyone 🎁 steamgift.example/claim</div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#f0b232\"><b>⚠️ Auto-trap triggered in Gaming Hub</b><div><b>Account:</b> <span class=\"mention\">@jake</span></div><div><b>Strike 1 of 3:</b> 5 hour timeout</div><div>Their recent messages were purged.</div><div class=\"sub\">Next: 5 days, then the mute role</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "blacklist",
@@ -1201,6 +1472,7 @@
         }
       ],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "threat-network"
@@ -1210,7 +1482,9 @@
           "name": "/request-blacklist",
           "kind": "slash",
           "description": "Request a user to be blacklisted (Developer notified)",
-          "permissions": [],
+          "permissions": [
+            "Moderate Members"
+          ],
           "developer": false,
           "tester": false,
           "aliases": [],
@@ -1232,7 +1506,7 @@
             {
               "name": "proof",
               "type": "attachment",
-              "description": "Attach any proof (optional)",
+              "description": "Proof, image or video (optional)",
               "required": false,
               "choices": []
             }
@@ -1241,7 +1515,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>member-log</div><div class=\"body\">\n<div class=\"sys\">→ <b>scam_acc_19</b> joined the server</div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#ed4245\"><b>🔨 Blacklisted account banned on join</b><div><b>Account:</b> <span class=\"mention\">@scam_acc_19</span></div><div><b>Blacklist reason:</b> Scam links in several servers</div><div class=\"sub\">Banned before they could post</div></div></div></div>\n<div class=\"sys\"><span class=\"mention\">@mira</span> used <code>/request-blacklist</code></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#5865f2\"><b>Request sent</b><div>The syntaxx team will review it with your proof.</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>member-log</div><div class=\"body\">\r\n<div class=\"sys\">→ <b>scam_acc_19</b> joined the server</div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#ed4245\"><b>🔨 Blacklisted account banned on join</b><div><b>Account:</b> <span class=\"mention\">@scam_acc_19</span></div><div><b>Blacklist reason:</b> Scam links in several servers</div><div class=\"sub\">Banned before they could post</div></div></div></div>\r\n<div class=\"sys\"><span class=\"mention\">@mira</span> used <code>/request-blacklist</code></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#5865f2\"><b>Request sent</b><div>The syntaxx team will review it with your proof.</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "verification",
@@ -1263,6 +1537,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "trust-card"
@@ -1305,7 +1580,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>verify</div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#3ba55c\"><b>Verify to get in</b><div>Press the button and finish the short check to see the rest of the server.</div></div>\n<div class=\"btns\"><span class=\"btn success\">Verify</span></div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#5865f2\"><b>Your verification link</b><div>Open it to finish. It works for 15 minutes and only for you.</div><div class=\"sub\">Only you can see this</div></div>\n<div class=\"btns\"><span class=\"btn\">Open syntaxx.lol ↗</span></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>verify</div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#3ba55c\"><b>Verify to get in</b><div>Press the button and finish the short check to see the rest of the server.</div></div>\r\n<div class=\"btns\"><span class=\"btn success\">Verify</span></div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#5865f2\"><b>Your verification link</b><div>Open it to finish. It works for 15 minutes and only for you.</div><div class=\"sub\">Only you can see this</div></div>\r\n<div class=\"btns\"><span class=\"btn\">Open syntaxx.lol ↗</span></div></div></div>\r\n</div></div>"
     },
     {
       "id": "welcome-leave",
@@ -1326,6 +1601,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "trust-card"
@@ -1364,7 +1640,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>welcome</div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#3ba55c;max-width:560px\"><div class=\"row\"><div class=\"grow\"><b>👋 Welcome!</b><div style=\"margin-top:6px\">Welcome to <b>Gaming Hub</b>, <span class=\"mention\">@mira</span>!</div><div style=\"margin-top:10px\">Invited by: <b>nova</b></div></div><div class=\"thumb\" style=\"border-radius:50%\"></div></div></div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#ed4245\"><b>👋 Goodbye</b><div><b>jake</b> left the server.</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>welcome</div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#3ba55c;max-width:560px\"><div class=\"row\"><div class=\"grow\"><b>👋 Welcome!</b><div style=\"margin-top:6px\">Welcome to <b>Gaming Hub</b>, <span class=\"mention\">@mira</span>!</div><div style=\"margin-top:10px\">Invited by: <b>nova</b></div></div><div class=\"thumb\" style=\"border-radius:50%\"></div></div></div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#ed4245\"><b>👋 Goodbye</b><div><b>jake</b> left the server.</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "levels",
@@ -1389,6 +1665,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "casino"
@@ -1484,7 +1761,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>general</div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div>🎉 <span class=\"mention\">@mira</span> reached <b>level 12</b>!</div>\n<div class=\"image\" style=\"width:520px;height:170px;flex-direction:column;align-items:stretch;justify-content:center;padding:0 24px;gap:10px;background:linear-gradient(135deg,rgba(124,92,196,.55),rgba(50,100,170,.45))\"><div style=\"display:flex;gap:14px;align-items:center\"><div class=\"av\" style=\"width:64px;height:64px;font-size:22px\">M</div><div><div class=\"h2\">mira</div><div class=\"sub\" style=\"color:#dbe2f0\">Level 12 · rank #4</div></div></div><div style=\"height:12px;border-radius:6px;background:rgba(255,255,255,.2)\"><div style=\"width:64%;height:12px;border-radius:6px;background:#f2f3f5\"></div></div><div class=\"sub\" style=\"color:#dbe2f0;text-align:right\">1,840 / 2,880 XP</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>general</div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div>🎉 <span class=\"mention\">@mira</span> reached <b>level 12</b>!</div>\r\n<div class=\"image\" style=\"width:520px;height:170px;flex-direction:column;align-items:stretch;justify-content:center;padding:0 24px;gap:10px;background:linear-gradient(135deg,rgba(124,92,196,.55),rgba(50,100,170,.45))\"><div style=\"display:flex;gap:14px;align-items:center\"><div class=\"av\" style=\"width:64px;height:64px;font-size:22px\">M</div><div><div class=\"h2\">mira</div><div class=\"sub\" style=\"color:#dbe2f0\">Level 12 · rank #4</div></div></div><div style=\"height:12px;border-radius:6px;background:rgba(255,255,255,.2)\"><div style=\"width:64%;height:12px;border-radius:6px;background:#f2f3f5\"></div></div><div class=\"sub\" style=\"color:#dbe2f0;text-align:right\">1,840 / 2,880 XP</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "private-vcs",
@@ -1517,6 +1794,7 @@
         "A room is deleted the moment its owner leaves, or when it becomes empty; deleting one by hand removes its record too.",
         "`/setup voice` refuses to run until `/setup mute-role` has stored a mute role that still exists, and re-running it replaces the config and deletes the old join channel."
       ],
+      "earns": [],
       "arrived": [],
       "related": [],
       "commands": [
@@ -1557,7 +1835,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"split\"><div class=\"side\"><div class=\"cat\">VOICE</div><div class=\"ch\">🔊 Join to create</div><div class=\"ch on\">🔊 mira's VC</div><div class=\"vc\"><span class=\"dot\" style=\"background:#3ba55c\"></span>mira</div><div class=\"vc\"><span class=\"dot\" style=\"background:#5865f2\"></span>nova</div><div class=\"ch\">🔊 oak's VC</div><div class=\"vc\"><span class=\"dot\" style=\"background:#f0b232\"></span>oak</div></div>\n<div class=\"body\"><div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div>Your room is ready, <span class=\"mention\">@mira</span>. Use the menus to change it.</div>\n<div class=\"select\">Change channel settings<span>▾</span></div><div class=\"menu\"><div class=\"on\">🔒 Lock Channel</div><div>🔓 Unlock Channel</div><div>👑 Set VC Owner</div><div>👢 Kick User</div><div>⛔ Block User</div></div>\n<div class=\"select\">Channel tools<span>▾</span></div></div></div></div></div>\n</div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"split\"><div class=\"side\"><div class=\"cat\">VOICE</div><div class=\"ch\">🔊 Join to create</div><div class=\"ch on\">🔊 mira's VC</div><div class=\"vc\"><span class=\"dot\" style=\"background:#3ba55c\"></span>mira</div><div class=\"vc\"><span class=\"dot\" style=\"background:#5865f2\"></span>nova</div><div class=\"ch\">🔊 oak's VC</div><div class=\"vc\"><span class=\"dot\" style=\"background:#f0b232\"></span>oak</div></div>\r\n<div class=\"body\"><div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div>Your room is ready, <span class=\"mention\">@mira</span>. Use the menus to change it.</div>\r\n<div class=\"select\">Change channel settings<span>▾</span></div><div class=\"menu\"><div class=\"on\">🔒 Lock Channel</div><div>🔓 Unlock Channel</div><div>👑 Set VC Owner</div><div>👢 Kick User</div><div>⛔ Block User</div></div>\r\n<div class=\"select\">Channel tools<span>▾</span></div></div></div></div></div>\r\n</div>"
     },
     {
       "id": "casino",
@@ -1582,6 +1860,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "levels"
@@ -1749,7 +2028,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>casino</div><div class=\"body\">\n<div class=\"sys\"><span class=\"mention\">@jaxon</span> used <code>/blackjack</code></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#c9b06a;max-width:460px\"><b>🃏 Blackjack</b><div><b>Your hand:</b> <code>K♠</code> <code>7♥</code> = 17</div><div><b>Dealer:</b> <code>9♦</code> <code>??</code></div><div class=\"sub\">Bet: 250 chips</div></div>\n<div class=\"btns\"><span class=\"btn primary\">Hit</span><span class=\"btn\">Stand</span></div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#3ba55c;max-width:460px\"><b>💼 jaxon</b><div>Chips: <b>4,120</b> · next <code>/claim</code> <span class=\"ts\">in 6 hours</span></div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>casino</div><div class=\"body\">\r\n<div class=\"sys\"><span class=\"mention\">@jaxon</span> used <code>/blackjack</code></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#c9b06a;max-width:460px\"><b>🃏 Blackjack</b><div><b>Your hand:</b> <code>K♠</code> <code>7♥</code> = 17</div><div><b>Dealer:</b> <code>9♦</code> <code>??</code></div><div class=\"sub\">Bet: 250 chips</div></div>\r\n<div class=\"btns\"><span class=\"btn primary\">Hit</span><span class=\"btn\">Stand</span></div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#3ba55c;max-width:460px\"><b>💼 jaxon</b><div>Chips: <b>4,120</b> · next <code>/claim</code> <span class=\"ts\">in 6 hours</span></div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "color-roles",
@@ -1770,6 +2049,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [],
       "commands": [
@@ -1788,7 +2068,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>roles</div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#c9b06a\"><b>Pick your colour</b><div>🔴 <b style=\"color:#ed4245\">Red</b> · 🟢 <b style=\"color:#3ba55c\">Green</b> · 🔵 <b style=\"color:#3b82f6\">Blue</b> · 🟣 <b style=\"color:#a970ff\">Purple</b></div><div class=\"sub\">One colour at a time</div></div>\n<div><span class=\"react\">🔴 12</span><span class=\"react on\">🟢 9</span><span class=\"react\">🔵 15</span><span class=\"react\">🟣 7</span></div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"sub\">· in your DMs</span></div><div>✅ You have been given the role <b>Green</b>.</div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>roles</div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#c9b06a\"><b>Pick your colour</b><div>🔴 <b style=\"color:#ed4245\">Red</b> · 🟢 <b style=\"color:#3ba55c\">Green</b> · 🔵 <b style=\"color:#3b82f6\">Blue</b> · 🟣 <b style=\"color:#a970ff\">Purple</b></div><div class=\"sub\">One colour at a time</div></div>\r\n<div><span class=\"react\">🔴 12</span><span class=\"react on\">🟢 9</span><span class=\"react\">🔵 15</span><span class=\"react\">🟣 7</span></div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"sub\">· in your DMs</span></div><div>✅ You have been given the role <b>Green</b>.</div></div></div>\r\n</div></div>"
     },
     {
       "id": "command-perms",
@@ -1803,13 +2083,15 @@
       "points": [
         "Allow or deny roles per command.",
         "Limit a command to some channels.",
+        "Protect staff roles or users from avatar and banner lookups (being built).",
         "Admins and the owner can always use everything."
       ],
       "use": [
-        "Allow: `/perms allow`. Deny: `/perms deny`. See all: `/perms list`. Undo: `/perms reset`."
+        "Allow: `/perms allow`. Deny: `/perms deny`. See all: `/perms list`. Undo: `/perms reset`. Protect staff: `/perms protect` or `taxx!perms protect avatar -r @Staff` (being built)."
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "moderation"
@@ -1976,10 +2258,120 @@
             }
           ],
           "copy": "/perms reset command:"
+        },
+        {
+          "name": "/perms protect",
+          "kind": "slash",
+          "description": "Stop others from viewing a user's or role's avatar/banner",
+          "permissions": [
+            "Administrator"
+          ],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [
+            {
+              "name": "command",
+              "type": "string",
+              "description": "Command to protect against",
+              "required": true,
+              "choices": [
+                "avatar",
+                "banner"
+              ]
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "description": "Protect a user or a role",
+              "required": true,
+              "choices": [
+                "user",
+                "role"
+              ]
+            },
+            {
+              "name": "user",
+              "type": "user",
+              "description": "User to protect (when type is user)",
+              "required": false,
+              "choices": []
+            },
+            {
+              "name": "role",
+              "type": "role",
+              "description": "Role to protect (when type is role)",
+              "required": false,
+              "choices": []
+            }
+          ],
+          "copy": "/perms protect command: type:"
+        },
+        {
+          "name": "/perms unprotect",
+          "kind": "slash",
+          "description": "Remove avatar/banner protection from a user or role",
+          "permissions": [
+            "Administrator"
+          ],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [
+            {
+              "name": "command",
+              "type": "string",
+              "description": "Command to protect against",
+              "required": true,
+              "choices": [
+                "avatar",
+                "banner"
+              ]
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "description": "Protect a user or a role",
+              "required": true,
+              "choices": [
+                "user",
+                "role"
+              ]
+            },
+            {
+              "name": "user",
+              "type": "user",
+              "description": "User to protect (when type is user)",
+              "required": false,
+              "choices": []
+            },
+            {
+              "name": "role",
+              "type": "role",
+              "description": "Role to protect (when type is role)",
+              "required": false,
+              "choices": []
+            }
+          ],
+          "copy": "/perms unprotect command: type:"
+        },
+        {
+          "name": "taxx!perms",
+          "kind": "prefix",
+          "description": "Manage command permissions for this server",
+          "permissions": [],
+          "developer": false,
+          "tester": false,
+          "aliases": [
+            "permissions",
+            "permission"
+          ],
+          "options": [],
+          "copy": "taxx!perms"
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>staff-commands</div><div class=\"body\">\n<div class=\"sys\"><span class=\"mention\">@Admin</span> used <code>/perms list</code></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#5865f2;max-width:560px\"><b>Command permissions</b><div><code>warn</code> Allowed: <span class=\"mention\">@Mods</span> <span class=\"mention\">@Helpers</span> · all channels</div><div><code>timeout</code> Allowed: <span class=\"mention\">@Mods</span> · denied: <span class=\"mention\">@Trial</span></div><div><code>ban</code> Allowed: <span class=\"mention\">@Admins</span> · only <span class=\"mention\">#mod-log</span></div><div class=\"sub\">Admins and the owner can always use everything</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>staff-commands</div><div class=\"body\">\r\n<div class=\"sys\"><span class=\"mention\">@Admin</span> used <code>/perms list</code></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#5865f2;max-width:560px\"><b>Command permissions</b><div><code>warn</code> Allowed: <span class=\"mention\">@Mods</span> <span class=\"mention\">@Helpers</span> · all channels</div><div><code>timeout</code> Allowed: <span class=\"mention\">@Mods</span> · denied: <span class=\"mention\">@Trial</span></div><div><code>ban</code> Allowed: <span class=\"mention\">@Admins</span> · only <span class=\"mention\">#mod-log</span></div><div><code>avatar</code> 🛡️ Protected: <span class=\"mention\">@Staff</span> <span class=\"mention\">@HeadMod</span></div><div class=\"sub\">Admins and the owner can always use everything</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "quotes",
@@ -2000,6 +2392,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [],
       "commands": [
@@ -2016,7 +2409,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>general</div><div class=\"body\">\n<div class=\"sys\"><span class=\"mention\">@oak</span> quoted a message</div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"image\" style=\"width:560px;height:280px;justify-content:flex-start;gap:28px;padding:0 36px;background:#0e0f12\"><div class=\"av\" style=\"width:120px;height:120px;font-size:40px\">N</div><div style=\"display:flex;flex-direction:column;gap:12px\"><div style=\"font-size:24px;color:#f2f3f5;font-style:italic;line-height:1.3\">“Who put the cheese in the server fridge.”</div><div style=\"color:#949ba4\">— nova</div></div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>general</div><div class=\"body\">\r\n<div class=\"sys\"><span class=\"mention\">@oak</span> quoted a message</div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"image\" style=\"width:560px;height:280px;justify-content:flex-start;gap:28px;padding:0 36px;background:#0e0f12\"><div class=\"av\" style=\"width:120px;height:120px;font-size:40px\">N</div><div style=\"display:flex;flex-direction:column;gap:12px\"><div style=\"font-size:24px;color:#f2f3f5;font-style:italic;line-height:1.3\">“Who put the cheese in the server fridge.”</div><div style=\"color:#949ba4\">— nova</div></div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "ai-check",
@@ -2026,17 +2419,19 @@
       "building": false,
       "since": "",
       "sinceLabel": "",
-      "summary": "Checks whether a message looks written by AI.",
-      "lead": "Right-click a message › Apps › AI Check for an estimate of whether it was written by AI.",
+      "summary": "Checks whether a message's text or images look AI-made, and whether the photo was already posted online.",
+      "lead": "Right-click a message › Apps › AI Check for an estimate of whether its text or images are AI-made, plus a Google Lens search for exact copies of each photo online.",
       "points": [
-        "Right-click any message.",
-        "Shows how likely it is to be AI-written."
+        "Right-click any message › Apps › AI Check.",
+        "Scores text and up to 4 images for AI likelihood.",
+        "Searches Google Lens for exact copies of each image."
       ],
       "use": [
         "Right-click a message › Apps › AI Check (Administrator)."
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [],
       "commands": [
@@ -2055,7 +2450,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>essays</div><div class=\"body\">\n<div class=\"msg\" style=\"opacity:.6\"><div class=\"av\">S</div><div class=\"col\"><div class=\"who\"><span class=\"name\">sam</span><span class=\"time\">Today at 20:58</span></div><div>In conclusion, the multifaceted nature of this issue underscores the importance of a holistic approach…</div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#f0b232\"><b>AI check</b><div>This message looks <b>likely AI-written</b>.</div><div style=\"height:8px;border-radius:4px;background:#1e1f22;width:320px\"><div style=\"width:87%;height:8px;border-radius:4px;background:#f0b232\"></div></div><div class=\"sub\">An estimate, not proof · only you can see this</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>car-pics</div><div class=\"body\">\n<div class=\"msg\" style=\"opacity:.6\"><div class=\"av\">K</div><div class=\"col\"><div class=\"who\"><span class=\"name\">k1ra_x</span><span class=\"time\">Today at 21:09</span></div><div>finally finished my M4 build 🔥</div><div class=\"image\" style=\"width:250px;height:72px\">photo.jpg</div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#f0b232\"><b>AI Check</b><div><b>Image</b><div><b>6%</b> AI likelihood · Likely a real photo</div></div><div><b>Seen online · Google Lens</b><div><b class=\"warn\">Found on 4 pages</b>, so it may not be their photo</div><div style=\"font-size:13px\">• <span style=\"color:#00a8fc\">bimmerpost.com</span> · G82 M4 Competition in Isle of Man Green</div></div><div class=\"sub\">An estimate, not proof · only you can see this</div></div></div></div>\n</div></div>"
     },
     {
       "id": "car-check",
@@ -2076,6 +2471,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [],
       "commands": [
@@ -2100,7 +2496,173 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>cars</div><div class=\"body\">\n<div class=\"sys\"><span class=\"mention\">@jaxon</span> used <code>/checkmycar</code></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#3b82f6;max-width:480px\"><b>🚗 Car check</b><div style=\"display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:4px\"><div><b>Make</b><div>BMW</div></div><div><b>Model</b><div>3 Series</div></div><div><b>Year</b><div>2019</div></div></div><div class=\"sub\">From the VIN · free data</div></div></div></div>\n<div class=\"input\"><span>/checkmycar</span><span class=\"opt\">vin: WBA…</span></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>cars</div><div class=\"body\">\r\n<div class=\"sys\"><span class=\"mention\">@jaxon</span> used <code>/checkmycar</code></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#3b82f6;max-width:480px\"><b>🚗 Car check</b><div style=\"display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:4px\"><div><b>Make</b><div>BMW</div></div><div><b>Model</b><div>3 Series</div></div><div><b>Year</b><div>2019</div></div></div><div class=\"sub\">From the VIN · free data</div></div></div></div>\r\n<div class=\"input\"><span>/checkmycar</span><span class=\"opt\">vin: WBA…</span></div>\r\n</div></div>"
+    },
+    {
+      "id": "custom-commands",
+      "name": "Custom commands",
+      "audience": "public",
+      "status": "stable",
+      "building": false,
+      "since": "",
+      "sinceLabel": "",
+      "summary": "A server's own trigger words that reply with saved text, up to 2 images, or both, optionally in one channel only.",
+      "lead": "A server's own trigger words. When someone sends one as a whole message, the bot replies with the saved text, images, or both. Commands are added and removed from the dashboard.",
+      "points": [
+        "Added and removed from the dashboard's Custom Commands tab.",
+        "Up to 2 uploaded images per command, shown as real images.",
+        "Optionally limited to one channel, so the same trigger can reply differently per channel.",
+        "Big photos are shrunk automatically; GIFs stay animated.",
+        "Mentions in replies are switched off."
+      ],
+      "use": [
+        "Add one: the dashboard's Custom Commands tab. Type the trigger, a response, and pick up to 2 images or a channel.",
+        "Use it: send the trigger as the whole message."
+      ],
+      "why": [
+        {
+          "title": "Images live in the database",
+          "text": "Linked images can break or expire. Uploaded images are kept with the rest of the bot's data, apart from the command list so it stays small, and the bot attaches them to its reply."
+        }
+      ],
+      "rules": [],
+      "earns": [],
+      "arrived": [
+        {
+          "date": "2026-11-13",
+          "what": "Up to 2 uploaded images per command, optional text, and an optional one-channel limit.",
+          "label": "13 Nov 2026"
+        }
+      ],
+      "related": [],
+      "commands": [],
+      "settings": null,
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>car-pics<span class=\"topic\">custom command m3 · only in this channel</span></div><div class=\"body\">\n<div class=\"msg\"><div class=\"av\">H</div><div class=\"col\"><div class=\"who\"><span class=\"name\">Han</span><span class=\"time\">Today at 20:41</span></div><div>m3</div></div></div>\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"sys\" style=\"font-size:12px;margin-bottom:2px\">↱ <span class=\"mention\">@Han</span> m3</div><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 20:41</span></div>\n<div>The M3 of the week 👇</div>\n<div style=\"display:flex;gap:6px;margin-top:6px\"><div class=\"image\" style=\"width:260px;height:195px;align-items:flex-end;padding:8px;color:#f2f3f5;text-shadow:0 1px 2px #000;background:radial-gradient(circle at 50% 60%,#2f5fa8 0,transparent 45%),linear-gradient(#8fb6e0,#4a4f57)\">m3-front.jpg</div><div class=\"image\" style=\"width:156px;height:195px;align-items:flex-end;padding:8px;color:#f2f3f5;text-shadow:0 1px 2px #000;background:radial-gradient(circle at 50% 60%,#c9d3df 0,transparent 45%),linear-gradient(#1b2b44,#98c1d9)\">m3-night.jpg</div></div>\n</div></div>\n</div></div>"
+    },
+    {
+      "id": "cross-server-calls",
+      "name": "Cross-server calls",
+      "audience": "public",
+      "status": "beta",
+      "building": true,
+      "since": "2026-07-18",
+      "sinceLabel": "18 Jul 2026",
+      "summary": "Chat with another server through a call channel, matched at random.",
+      "lead": "Pick a call channel and run `taxx!call`. syntaxx matches you with another server, and messages cross over both ways until someone hangs up or the call goes quiet.",
+      "points": [
+        "Pairs your call channel with another server's at random.",
+        "The waiting server accepts or declines, unless it turned Require Accept off.",
+        "Up to 3 servers in one call, shown by colour labels, not names.",
+        "Every relayed message passes the word filter.",
+        "Mods on the other side can trace or time out a sender."
+      ],
+      "use": [
+        "Pick the channel: `taxx!setupcallchannel #calls`, or the dashboard's Settings › Calls. Require Accept and the idle timeout are there too.",
+        "Let a role call and hang up: `taxx!perms allow call -r <role>`, then the same for `hangup`.",
+        "Call: `taxx!call`. Stop waiting: `taxx!call cancel`. Join a call already going: `taxx!call mashup`. End: `taxx!hangup`.",
+        "Moderate by replying to a relayed message: `taxx!callinfo` tells you who sent it, `taxx!calltimeout <minutes> [reason]` stops them relaying."
+      ],
+      "why": [
+        {
+          "title": "Labels, not server names",
+          "text": "In a 3-server call the others only see 🔴 Server A, 🔵 Server B and 🟢 Server C, so an offensive server name can't reach anyone."
+        },
+        {
+          "title": "Moderation by reply",
+          "text": "You can only trace or time out someone who actually sent into your channel, so no one can be targeted by a typed ID."
+        },
+        {
+          "title": "The filter always runs",
+          "text": "Relayed text passes the word filter even when a server has automod off, because it lands in someone else's server."
+        }
+      ],
+      "rules": [],
+      "earns": [],
+      "arrived": [
+        {
+          "date": "2026-07-18",
+          "what": "Calls between two servers.",
+          "label": "18 Jul 2026"
+        },
+        {
+          "date": "2026-07-19",
+          "what": "Mashups, plus `taxx!callinfo` and `taxx!calltimeout`.",
+          "label": "19 Jul 2026"
+        },
+        {
+          "date": "2026-11-14",
+          "what": "Accept and Decline work again, so Require Accept is back.",
+          "label": "14 Nov 2026"
+        }
+      ],
+      "related": [
+        "command-perms",
+        "moderation"
+      ],
+      "commands": [
+        {
+          "name": "taxx!call",
+          "kind": "prefix",
+          "description": "Get randomly matched with another server's call channel and chat",
+          "permissions": [],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [],
+          "copy": "taxx!call"
+        },
+        {
+          "name": "taxx!hangup",
+          "kind": "prefix",
+          "description": "End the current cross-server call",
+          "permissions": [],
+          "developer": false,
+          "tester": false,
+          "aliases": [
+            "endcall"
+          ],
+          "options": [],
+          "copy": "taxx!hangup"
+        },
+        {
+          "name": "taxx!setupcallchannel",
+          "kind": "prefix",
+          "description": "Configure this server's cross-server call channel",
+          "permissions": [],
+          "developer": false,
+          "tester": false,
+          "aliases": [
+            "setup-call-channel",
+            "callsetup"
+          ],
+          "options": [],
+          "copy": "taxx!setupcallchannel"
+        },
+        {
+          "name": "taxx!callinfo",
+          "kind": "prefix",
+          "description": "Privately reveal the sender (user ID + server ID) behind a relayed call message",
+          "permissions": [],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [],
+          "copy": "taxx!callinfo"
+        },
+        {
+          "name": "taxx!calltimeout",
+          "kind": "prefix",
+          "description": "Time a user in the partner server out of cross-server calls (or lift one on your own member)",
+          "permissions": [],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [],
+          "copy": "taxx!calltimeout"
+        }
+      ],
+      "settings": null,
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>calls<span class=\"topic\">Cross-server call channel</span></div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 20:31</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#57f287\"><b>📞 Call Connected!</b><div>You're now connected with <b>Pixel Lounge</b>. Anything sent in this channel will be relayed to them.</div><div>Use <code>taxx!hangup</code> to end the call.</div></div></div></div>\r\n<div class=\"msg\"><div class=\"av\">K</div><div class=\"col\"><div class=\"who\"><span class=\"name\">kiwi_22</span><span class=\"time\">Today at 20:32</span></div><div>hey! where's everyone from?</div></div></div>\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 20:32</span></div><div><b>nova:</b> hi from Pixel Lounge 👋</div><div><b>nova:</b> we're doing a movie night later, you?</div></div></div>\r\n<div class=\"msg\"><div class=\"av\" style=\"background:#b06a5d\">M</div><div class=\"col\"><div class=\"who\"><span class=\"name\" style=\"color:#e67e22\">Mara</span><span class=\"time\">Today at 20:33</span></div><div>same here lol, what are you watching</div></div></div>\r\n<div class=\"input\">Message #calls</div>\r\n</div></div>"
     },
     {
       "id": "tools",
@@ -2113,7 +2675,7 @@
       "summary": "Avatars, banners, QR codes, background removal, timers and AFK.",
       "lead": "Small things members use every day.",
       "points": [
-        "See anyone's avatar or banner.",
+        "See anyone's avatar or banner, unless they're protected staff (being built).",
         "Make a QR code, remove an image's background.",
         "Timers, AFK status and a Vigenère cipher."
       ],
@@ -2123,6 +2685,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [],
       "commands": [
@@ -2195,7 +2758,7 @@
             {
               "name": "image",
               "type": "attachment",
-              "description": "The image to remove the background from",
+              "description": "The image to remove the background from (image, max 8 MB)",
               "required": true,
               "choices": []
             }
@@ -2296,7 +2859,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>bot-commands</div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"row\"><div class=\"embed\" style=\"border-left-color:#5865f2;width:250px\"><b>mira's avatar</b><div class=\"av\" style=\"width:200px;height:200px;border-radius:12px;font-size:60px\">M</div></div>\n<div class=\"embed\" style=\"border-left-color:#c9b06a;width:250px\"><b>QR code</b><div style=\"width:200px;height:200px;border-radius:8px;background:repeating-conic-gradient(#f2f3f5 0 25%,#111214 0 50%) 0 0/25px 25px\"></div></div></div></div></div>\n<div class=\"input\"><span>/qr</span><span class=\"opt\">text: https://syntaxx.lol</span></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>bot-commands</div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"row\"><div class=\"embed\" style=\"border-left-color:#5865f2;width:250px\"><b>mira's avatar</b><div class=\"av\" style=\"width:200px;height:200px;border-radius:12px;font-size:60px\">M</div></div>\r\n<div class=\"embed\" style=\"border-left-color:#c9b06a;width:250px\"><b>QR code</b><div style=\"width:200px;height:200px;border-radius:8px;background:repeating-conic-gradient(#f2f3f5 0 25%,#111214 0 50%) 0 0/25px 25px\"></div></div></div></div></div>\r\n<div class=\"input\"><span>/qr</span><span class=\"opt\">text: https://syntaxx.lol</span></div>\r\n</div></div>"
     },
     {
       "id": "help-info",
@@ -2319,6 +2882,7 @@
       ],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [],
       "commands": [
@@ -2389,7 +2953,7 @@
         }
       ],
       "settings": null,
-      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>bot-commands</div><div class=\"body\">\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\n<div class=\"embed\" style=\"border-left-color:#c9b06a\"><b>syntaxx.lol help</b><div>Pick a category to see its commands.</div></div>\n<div class=\"select\">Choose a category<span>▾</span></div><div class=\"menu\"><div class=\"on\">🛡️ Moderation</div><div>🎲 Casino</div><div>⭐ Levels</div><div>🧰 Tools</div><div>⚙️ Setup</div></div></div></div>\n</div></div>"
+      "scene": "<div class=\"sx-scene\"><div class=\"head\"><span class=\"hash\">#</span>bot-commands</div><div class=\"body\">\r\n<div class=\"msg\"><div class=\"av bot\">sx</div><div class=\"col\"><div class=\"who\"><span class=\"name\">syntaxx.lol</span><span class=\"app\">APP</span><span class=\"time\">Today at 21:14</span></div>\r\n<div class=\"embed\" style=\"border-left-color:#c9b06a\"><b>syntaxx.lol help</b><div>Pick a category to see its commands.</div></div>\r\n<div class=\"select\">Choose a category<span>▾</span></div><div class=\"menu\"><div class=\"on\">🛡️ Moderation</div><div>🎲 Casino</div><div>⭐ Levels</div><div>🧰 Tools</div><div>⚙️ Setup</div></div></div></div>\r\n</div></div>"
     },
     {
       "id": "threat-network",
@@ -2409,6 +2973,7 @@
       "use": [],
       "why": [],
       "rules": [],
+      "earns": [],
       "arrived": [],
       "related": [
         "trust-card",
