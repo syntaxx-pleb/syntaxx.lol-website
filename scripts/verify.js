@@ -87,41 +87,36 @@ function walk(dir, out = []) {
 // ── 4. Home's headline figures must match the real command catalogue ────────
 //
 // Home (and the Discord link previews, via web/src/data/stats.ts) advertises a
-// command count and a category count. The catalogue itself
-// lives in Commands.tsx and cannot be imported into Home without pulling a
-// 27 kB list into the landing page's bundle, so the figures are written out by
-// hand — which means they can quietly stop being true the moment a command is
-// added. A visitor cannot tell; the numbers just become a small lie.
+// command count and a feature count. Both describe web/src/data/features.json,
+// the catalogue generated from the bot that the Commands and Features pages
+// render (decided 2026-11-18). stats.ts can't import it without pulling every
+// feature's scene into the landing page's bundle, so the figures are written
+// out by hand — and checked here, so they can't quietly stop being true.
 {
-  const commands = readFileSync(join(root, "web", "src", "pages", "Commands.tsx"), "utf8");
+  const catalogue = JSON.parse(readFileSync(join(root, "web", "src", "data", "features.json"), "utf8"));
   const home = readFileSync(join(root, "web", "src", "data", "stats.ts"), "utf8");
 
-  // Category objects in the array are the ones declaring an `id:` and a
-  // `label:` on the same line; command entries declare `name:` and `desc:`.
-  const categories = [...commands.matchAll(/^\s*id:\s*"[^"]+",\s*label:/gm)].length;
-  const commandCount = [...commands.matchAll(/^\s*\{\s*name:\s*"/gm)].length;
+  // The Commands page lists the commands of every feature that has an area.
+  const commandCount = catalogue.features
+    .filter((f) => f.area)
+    .reduce((n, f) => n + f.commands.length, 0);
+  const featureCount = catalogue.features.length;
 
   const stated = (label) => {
     const m = home.match(new RegExp(`value:\\s*"([^"]+)",\\s*label:\\s*"${label}"`));
     return m ? m[1] : null;
   };
 
-  const statedCategories = stated("Categories");
-  if (statedCategories !== null && Number(statedCategories) !== categories) {
-    fail(
-      `data/stats.ts advertises ${statedCategories} categories, but Commands.tsx defines ${categories}`,
-    );
+  const statedFeatures = stated("Features");
+  if (statedFeatures === null || Number(statedFeatures) !== featureCount) {
+    fail(`data/stats.ts advertises ${statedFeatures} features, but features.json has ${featureCount}`);
   }
 
-  // "100+" style claims only need to remain a true lower bound.
+  // "85+": the command count rounded down to a multiple of 5.
   const statedCommands = stated("Commands");
-  if (statedCommands !== null) {
-    const floor = Number(statedCommands.replace("+", ""));
-    if (Number.isFinite(floor) && commandCount < floor) {
-      fail(
-        `data/stats.ts advertises "${statedCommands}" commands, but Commands.tsx defines only ${commandCount}`,
-      );
-    }
+  const expected = `${Math.floor(commandCount / 5) * 5}+`;
+  if (statedCommands !== expected) {
+    fail(`data/stats.ts advertises "${statedCommands}" commands; the catalogue has ${commandCount}, so it should say "${expected}"`);
   }
 }
 

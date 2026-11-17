@@ -10,6 +10,7 @@
       "id": "moderation",
       "name": "Moderation & cases",
       "audience": "public",
+      "area": "moderation",
       "status": "stable",
       "building": true,
       "since": "",
@@ -180,7 +181,7 @@
         {
           "name": "/timeout",
           "kind": "slash",
-          "description": "<:hourglassIcon:1395101523264016454> Timeout a member with a reason.",
+          "description": "Timeout a member with a reason.",
           "permissions": [
             "Moderate Members"
           ],
@@ -436,7 +437,7 @@
         {
           "name": "/dm-member",
           "kind": "slash",
-          "description": "<:mailIcon:1395101538371764366> Send a structured DM to a member (requires Manage Messages).",
+          "description": "Send a structured DM to a member (requires Manage Messages).",
           "permissions": [
             "Manage Messages"
           ],
@@ -564,7 +565,7 @@
         {
           "name": "ctx:Ban",
           "kind": "user-context",
-          "description": "",
+          "description": "Right-click a member › Apps › Ban",
           "permissions": [
             "Ban Members"
           ],
@@ -577,7 +578,7 @@
         {
           "name": "ctx:Kick",
           "kind": "user-context",
-          "description": "",
+          "description": "Right-click a member › Apps › Kick",
           "permissions": [
             "Kick Members"
           ],
@@ -590,7 +591,7 @@
         {
           "name": "ctx:Purge Messages",
           "kind": "user-context",
-          "description": "",
+          "description": "Right-click a member › Apps › Purge Messages",
           "permissions": [
             "Manage Messages"
           ],
@@ -671,6 +672,7 @@
       "id": "automod",
       "name": "Automod",
       "audience": "public",
+      "area": "moderation",
       "status": "stable",
       "building": false,
       "since": "",
@@ -753,6 +755,7 @@
       "id": "automod-media-flags",
       "name": "Automod media flags",
       "audience": "public",
+      "area": "moderation",
       "status": "planned",
       "building": true,
       "since": "",
@@ -781,6 +784,7 @@
       "id": "softban",
       "name": "Softban & appeals",
       "audience": "public",
+      "area": "moderation",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1117,6 +1121,7 @@
       "id": "trust-card",
       "name": "Join trust card",
       "audience": "public",
+      "area": "protection",
       "status": "beta",
       "building": false,
       "since": "2026-10-29",
@@ -1214,6 +1219,7 @@
       "id": "account-age-gate",
       "name": "Account age gate",
       "audience": "public",
+      "area": "protection",
       "status": "beta",
       "building": false,
       "since": "2026-11-07",
@@ -1300,6 +1306,7 @@
       "id": "anti-raid",
       "name": "Anti-raid & spam",
       "audience": "public",
+      "area": "protection",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1351,6 +1358,7 @@
       "id": "auto-kick",
       "name": "Auto-kick trap",
       "audience": "public",
+      "area": "protection",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1450,6 +1458,7 @@
       "id": "blacklist",
       "name": "Global blacklist",
       "audience": "public",
+      "area": "moderation",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1521,6 +1530,7 @@
       "id": "verification",
       "name": "Verification",
       "audience": "public",
+      "area": "protection",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1586,6 +1596,7 @@
       "id": "welcome-leave",
       "name": "Welcome & leave messages",
       "audience": "public",
+      "area": "community",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1646,6 +1657,7 @@
       "id": "levels",
       "name": "Levels",
       "audience": "public",
+      "area": "levels-casino",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1767,6 +1779,7 @@
       "id": "private-vcs",
       "name": "Private VCs",
       "audience": "public",
+      "area": "community",
       "status": "stable",
       "building": false,
       "since": "",
@@ -1841,6 +1854,7 @@
       "id": "casino",
       "name": "Casino",
       "audience": "public",
+      "area": "levels-casino",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2034,6 +2048,7 @@
       "id": "color-roles",
       "name": "Colour roles",
       "audience": "public",
+      "area": "community",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2074,6 +2089,7 @@
       "id": "command-perms",
       "name": "Command permissions",
       "audience": "public",
+      "area": "moderation",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2377,6 +2393,7 @@
       "id": "quotes",
       "name": "Quotes",
       "audience": "public",
+      "area": "community",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2399,7 +2416,7 @@
         {
           "name": "ctx:Quote Message",
           "kind": "message-context",
-          "description": "",
+          "description": "Right-click a message › Apps › Quote Message",
           "permissions": [],
           "developer": false,
           "tester": false,
@@ -2415,6 +2432,7 @@
       "id": "ai-check",
       "name": "AI check",
       "audience": "public",
+      "area": "tools",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2438,7 +2456,7 @@
         {
           "name": "ctx:AI Check",
           "kind": "message-context",
-          "description": "",
+          "description": "Right-click a message › Apps › AI Check",
           "permissions": [
             "Administrator"
           ],
@@ -2456,6 +2474,7 @@
       "id": "car-check",
       "name": "Car check",
       "audience": "public",
+      "area": "tools",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2502,6 +2521,7 @@
       "id": "custom-commands",
       "name": "Custom commands",
       "audience": "public",
+      "area": "community",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2543,6 +2563,7 @@
       "id": "cross-server-calls",
       "name": "Cross-server calls",
       "audience": "public",
+      "area": "community",
       "status": "beta",
       "building": true,
       "since": "2026-07-18",
@@ -2668,6 +2689,7 @@
       "id": "tools",
       "name": "Handy tools",
       "audience": "public",
+      "area": "tools",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2768,7 +2790,7 @@
         {
           "name": "/timer",
           "kind": "slash",
-          "description": "timer",
+          "description": "Show how long it has been since 9 August 2025",
           "permissions": [],
           "developer": false,
           "tester": false,
@@ -2827,7 +2849,7 @@
         {
           "name": "taxx!avatar",
           "kind": "prefix",
-          "description": "",
+          "description": "Show a user's avatar (defaults to yourself)",
           "permissions": [],
           "developer": false,
           "tester": false,
@@ -2838,7 +2860,7 @@
         {
           "name": "taxx!banner",
           "kind": "prefix",
-          "description": "",
+          "description": "Show a user's profile banner (defaults to yourself)",
           "permissions": [],
           "developer": false,
           "tester": false,
@@ -2865,6 +2887,7 @@
       "id": "help-info",
       "name": "Help & server info",
       "audience": "public",
+      "area": "tools",
       "status": "stable",
       "building": false,
       "since": "",
@@ -2950,6 +2973,17 @@
             }
           ],
           "copy": "/rename new_name:"
+        },
+        {
+          "name": "/syntaxx",
+          "kind": "slash",
+          "description": "Displays detailed information and live statistics about Syntaxx Bot.",
+          "permissions": [],
+          "developer": false,
+          "tester": false,
+          "aliases": [],
+          "options": [],
+          "copy": "/syntaxx"
         }
       ],
       "settings": null,
@@ -2959,6 +2993,7 @@
       "id": "threat-network",
       "name": "Threat network",
       "audience": "public",
+      "area": "protection",
       "status": "planned",
       "building": false,
       "since": "",

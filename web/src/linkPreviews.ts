@@ -43,7 +43,7 @@ const PAGES: Record<Exclude<Route, "">, PageText> = {
   },
   commands: {
     title: "Commands · Syntaxx",
-    description: `All ${stat("Commands")} commands in ${stat("Categories")} categories, with what each one does and who can use it.`,
+    description: `All ${stat("Commands")} commands across ${stat("Features")} features, with what each one does and the permission it needs.`,
   },
   terms: {
     title: "Terms of Service · Syntaxx",
@@ -90,8 +90,8 @@ function commandsCard() {
     components: [
       text(
         "-# COMMANDS\n## All commands\n" +
-        `**${stat("Commands")}** commands in **${stat("Categories")}** categories, ` +
-        "from moderation and setup to leveling, casino and games.",
+        `**${stat("Commands")}** commands across **${stat("Features")}** features, ` +
+        "from moderation and softbans to levels, casino and tools.",
       ),
       { type: 1, components: [linkButton("Browse commands", `${ORIGIN}/commands`)] },
     ],
@@ -116,7 +116,7 @@ function homeCard(invite: string) {
       },
       { type: 14, divider: true, spacing: 1 },
       text(
-        `**${stat("Commands")}** commands · **${stat("Categories")}** categories · ` +
+        `**${stat("Commands")}** commands · **${stat("Features")}** features · ` +
         `**${stat("Every feature")}**, every feature`,
       ),
       { type: 14, divider: true, spacing: 1 },
