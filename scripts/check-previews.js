@@ -98,6 +98,11 @@ for (const { route, card } of ROUTES) {
   const texts = [];
   const collect = (c) => { if (c.type === 10) texts.push(c.content); (c.components ?? []).forEach(collect); if (c.accessory) collect(c.accessory); };
   collect(top);
+  // Link-preview cards don't render "-#" small text: Discord's Embed Debugger
+  // showed "-# FEATURES" literally (2026-11-18). Headings (#, ##) do work.
+  for (const t of texts) {
+    if (/^-# /m.test(t)) fail(`${where}: "-#" small text shows up literally in link previews: ${JSON.stringify(t.split("\n")[0])}`);
+  }
   const buttons = [];
   const collectB = (c) => { if (c.type === 2) buttons.push(c.label); (c.components ?? []).forEach(collectB); };
   collectB(top);
