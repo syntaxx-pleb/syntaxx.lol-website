@@ -1,9 +1,11 @@
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { copyFileSync, mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { withPreview, type Route } from "./web/src/linkPreviews";
+import { DEFAULT_DISCORD_CLIENT_ID, inviteUrl } from "./web/src/discordApp";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.resolve(here, "dist", "client");
@@ -12,7 +14,7 @@ const outDir = path.resolve(here, "dist", "client");
  * Client-side routes that must exist as real files. Keep in sync with the
  * <Route> list in web/src/App.tsx.
  */
-const ROUTES = ["commands", "terms", "privacy"];
+const ROUTES: Exclude<Route, "">[] = ["features", "commands", "terms", "privacy"];
 
 /**
  * GitHub Pages has no SPA fallback: it serves the file at the requested path,
@@ -25,24 +27,34 @@ const ROUTES = ["commands", "terms", "privacy"];
  * its own directory index — /commands/index.html answers 200 — and 404.html is
  * left to do its actual job for paths that really are missing.
  */
-function staticRoutes(): Plugin {
+function staticRoutes(invite: string): Plugin {
   return {
     name: "static-routes",
     apply: "build",
     closeBundle() {
-      const shell = path.join(outDir, "index.html");
-      copyFileSync(shell, path.join(outDir, "404.html"));
+      const shellPath = path.join(outDir, "index.html");
+      const shell = readFileSync(shellPath, "utf8");
+      writeFileSync(path.join(outDir, "404.html"), shell);
+      // Each copy also carries that page's own link preview: its title and
+      // description, and for some pages a Discord card (web/src/linkPreviews.ts).
+      // Discord runs no script, so the shell's home-page tags would otherwise
+      // be what every link shows.
+      writeFileSync(shellPath, withPreview(shell, "", invite));
       for (const route of ROUTES) {
         mkdirSync(path.join(outDir, route), { recursive: true });
-        copyFileSync(shell, path.join(outDir, route, "index.html"));
+        writeFileSync(path.join(outDir, route, "index.html"), withPreview(shell, route, invite));
       }
     },
   };
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   root: path.resolve(here, "web"),
-  plugins: [react(), tailwindcss(), staticRoutes()],
+  // The invite in the link previews is the app's own (web/src/config.ts):
+  // VITE_DISCORD_CLIENT_ID from web/.env* if set, else the default id.
+  plugins: [react(), tailwindcss(), staticRoutes(inviteUrl(
+    loadEnv(mode, path.resolve(here, "web"), "VITE_").VITE_DISCORD_CLIENT_ID ?? DEFAULT_DISCORD_CLIENT_ID,
+  ))],
   resolve: {
     alias: {
       "@": path.resolve(here, "web", "src"),
@@ -57,4 +69,4 @@ export default defineConfig({
   server: {
     port: 5173,
   },
-});
+}));

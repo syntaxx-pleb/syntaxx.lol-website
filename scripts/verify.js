@@ -84,7 +84,43 @@ function walk(dir, out = []) {
   }
 }
 
-// ── 4. Migrations must be uniquely and contiguously numbered ────────────────
+// ── 4. Home's headline figures must match the real command catalogue ────────
+//
+// Home (and the Discord link previews, via web/src/data/stats.ts) advertises a
+// command count and a feature count. Both describe web/src/data/features.json,
+// the catalogue generated from the bot that the Commands and Features pages
+// render (decided 2026-11-18). stats.ts can't import it without pulling every
+// feature's scene into the landing page's bundle, so the figures are written
+// out by hand — and checked here, so they can't quietly stop being true.
+{
+  const catalogue = JSON.parse(readFileSync(join(root, "web", "src", "data", "features.json"), "utf8"));
+  const home = readFileSync(join(root, "web", "src", "data", "stats.ts"), "utf8");
+
+  // The Commands page lists the commands of every feature that has an area.
+  const commandCount = catalogue.features
+    .filter((f) => f.area)
+    .reduce((n, f) => n + f.commands.length, 0);
+  const featureCount = catalogue.features.length;
+
+  const stated = (label) => {
+    const m = home.match(new RegExp(`value:\\s*"([^"]+)",\\s*label:\\s*"${label}"`));
+    return m ? m[1] : null;
+  };
+
+  const statedFeatures = stated("Features");
+  if (statedFeatures === null || Number(statedFeatures) !== featureCount) {
+    fail(`data/stats.ts advertises ${statedFeatures} features, but features.json has ${featureCount}`);
+  }
+
+  // "85+": the command count rounded down to a multiple of 5.
+  const statedCommands = stated("Commands");
+  const expected = `${Math.floor(commandCount / 5) * 5}+`;
+  if (statedCommands !== expected) {
+    fail(`data/stats.ts advertises "${statedCommands}" commands; the catalogue has ${commandCount}, so it should say "${expected}"`);
+  }
+}
+
+// ── 5. Migrations must be uniquely and contiguously numbered ────────────────
 //
 // D1 applies migrations in filename order and records what it has run. Two
 // files sharing a number apply in an order that depends on the filesystem.
