@@ -75,7 +75,7 @@ function featureCard() {
     accent_color: accent,
     components: [
       text(
-        "-# FEATURES\n## Everything syntaxx does\n" +
+        "## Everything syntaxx does\n" +
         `**${count("stable")}** stable · **${count("beta")}** in beta · **${count("planned")}** planned. ${list}`,
       ),
       { type: 1, components: [linkButton("See all features", `${ORIGIN}/features`)] },
@@ -89,7 +89,7 @@ function commandsCard() {
     accent_color: accent,
     components: [
       text(
-        "-# COMMANDS\n## All commands\n" +
+        "## All commands\n" +
         `**${stat("Commands")}** commands across **${stat("Features")}** features, ` +
         "from moderation and softbans to levels, casino and tools.",
       ),
